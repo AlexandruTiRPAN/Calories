@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/add_macros_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add macros for today"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Protein label -->
+    <TextView
+        android:id="@+id/add_protein_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Protein:"
+        app:layout_constraintTop_toBottomOf="@id/add_macros_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Protein input -->
+    <EditText
+        android:id="@+id/add_protein"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="g"
+        app:layout_constraintBaseline_toBaselineOf="@id/add_protein_text"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Carbs label -->
+    <TextView
+        android:id="@+id/add_carbs_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carbs:"
+        app:layout_constraintTop_toBottomOf="@id/add_protein_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Carbs input -->
+    <EditText
+        android:id="@+id/add_carbs"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="g"
+        app:layout_constraintBaseline_toBaselineOf="@id/add_carbs_text"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Fat label -->
+    <TextView
+        android:id="@+id/add_fat_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fat:"
+        app:layout_constraintTop_toBottomOf="@id/add_carbs_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Fat input -->
+    <EditText
+        android:id="@+id/add_fat"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="g"
+        app:layout_constraintBaseline_toBaselineOf="@id/add_fat_text"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Close button (left) -->
+    <Button
+        android:id="@+id/close_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toBottomOf="@id/add_fat_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/save_button" />
+
+    <!-- Save button (right) -->
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@id/add_fat_text"
+        app:layout_constraintStart_toEndOf="@id/close_button"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
