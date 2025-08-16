@@ -18,14 +18,20 @@ import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     AppDatabase db;
     DailyMacrosDao dao;
+    MacroEntryDao macro_dao;
     String today;
 
     LinearLayout additionsContainer;
@@ -36,18 +42,26 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "nutrition-db").build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "nutrition-db").fallbackToDestructiveMigration().build();
         dao = db.dailyMacrosDao();
-        today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        macro_dao = db.macroEntryDao();
+        today = getIntent().getStringExtra("today");
+        if (today == null) {
+            today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        }
         additionsContainer = findViewById(R.id.additions_container);
-        addDate(today);
-        showDate(today);
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+
+        DatabaseExecutor.diskIO().execute(() -> {
+            handle_dates(today);
+            runOnUiThread(() -> showDate(today));
         });
     }
 
@@ -77,6 +91,25 @@ public class MainActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.fats_value)).setText(String.valueOf(existing.fat));
                     ((TextView) findViewById(R.id.calories_value)).setText(String.valueOf(existing.calories));
                 });
+                List<MacroEntry> todayEntrys = macro_dao.getEntriesForDay(existing.id);
+                if (todayEntrys != null && !todayEntrys.isEmpty()) {
+                    runOnUiThread(() -> {
+                        additionsContainer.removeAllViews();
+                        for (MacroEntry entry : todayEntrys) {
+                            View additionEntry = getLayoutInflater().inflate(R.layout.addition_entry, additionsContainer, false);
+
+                            ((TextView) additionEntry.findViewById(R.id.protein_entry_value)).setText(String.valueOf(entry.protein));
+                            ((TextView) additionEntry.findViewById(R.id.carbs_entry_value)).setText(String.valueOf(entry.carbs));
+                            ((TextView) additionEntry.findViewById(R.id.fat_entry_value)).setText(String.valueOf(entry.fat));
+                            ((TextView) additionEntry.findViewById(R.id.calories_entry_value)).setText(String.valueOf(entry.calories));
+
+                            FloatingActionButton removeBtn = additionEntry.findViewById(R.id.remove_entry);
+                            removeBtn.setOnClickListener(view -> handle_remove_entry(additionEntry, entry));
+
+                            additionsContainer.addView(additionEntry);
+                        }
+                    });
+                }
             }
         });
     }
@@ -129,53 +162,61 @@ public class MainActivity extends AppCompatActivity {
         int calories=4*protein+4*carbs+9*fat;
 
         updateDate(today,protein, carbs, fat, calories);
-
-        View additionEntry= getLayoutInflater().inflate(R.layout.addition_entry, additionsContainer, false);
-        TextView proteinValue = additionEntry.findViewById(R.id.protein_entry_value);
-        proteinValue.setText(String.valueOf(protein));
-        TextView carbsValue= additionEntry.findViewById(R.id.carbs_entry_value);
-        carbsValue.setText(String.valueOf(carbs));
-        TextView fatValue = additionEntry.findViewById(R.id.fat_entry_value);
-        fatValue.setText(String.valueOf(fat));
-        TextView caloriesValue= additionEntry.findViewById(R.id.calories_entry_value);
-        caloriesValue.setText(String.valueOf(calories));
-
-        additionsContainer.addView(additionEntry);
-
-
-        FloatingActionButton removeBtn = additionEntry.findViewById(R.id.remove_entry);
-        removeBtn.setOnClickListener(view -> {
-            handle_remove_entry(additionEntry);
-        });
-
-
+        addEntry(today,protein, carbs, fat, calories);
         showDate(today);
     }
 
-    public void handle_remove_entry(View additionEntry){
-        TextView proteinValue = additionEntry.findViewById(R.id.protein_entry_value);
-        TextView carbsValue= additionEntry.findViewById(R.id.carbs_entry_value);
-        TextView fatValue = additionEntry.findViewById(R.id.fat_entry_value);
-        TextView caloriesValue= additionEntry.findViewById(R.id.calories_entry_value);
-        int protein = Integer.parseInt(proteinValue.getText().toString());
-        int carbs =Integer.parseInt(carbsValue.getText().toString());
-        int fats = Integer.parseInt(fatValue.getText().toString());
-        int calories = Integer.parseInt(caloriesValue.getText().toString());
-        updateDate(today, -protein,-carbs,-fats,-calories);
-        showDate(today);
+    public void addEntry(String date, int protein, int carbs, int fat, int calories){
+        DatabaseExecutor.diskIO().execute(() -> {
+            DailyMacros existing = dao.getByDate(date);
+
+            if (existing != null) {
+                MacroEntry entry= new MacroEntry();
+                entry.day_id=existing.id;
+                entry.protein=protein;
+                entry.carbs=carbs;
+                entry.fat=fat;
+                entry.calories=calories;
+                macro_dao.insert(entry);
+            }
+        });
+    }
+
+    public void handle_dates(String today){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate todayDate = LocalDate.parse(today, formatter);
+
+        DailyMacros latest = dao.getLatest();
+        if (latest == null) {
+            addDate(today);
+            return;
+        }
+
+        LocalDate latestDate = LocalDate.parse(latest.date, formatter);
+
+        for (LocalDate date = latestDate; !date.isAfter(todayDate); date = date.plusDays(1)) {
+            addDate(date.format(formatter));
+        }
+    }
+    public void handle_remove_entry(View additionEntry, MacroEntry entry){
+        DatabaseExecutor.diskIO().execute(() -> {
+            macro_dao.deleteById(entry.entryId);
+        });
         additionsContainer.removeView(additionEntry);
+        updateDate(today, -entry.protein,-entry.carbs,-entry.fat,-entry.calories);
+        showDate(today);
     }
     public void handle_home(View v) {}
 
     public void handle_add_meal(View v) {
         Intent i = new Intent(this, AddMealActivity.class);
         startActivity(i);
-        finish();
     }
 
     public void handle_logs(View v) {
         Intent i = new Intent(this, LogsActivity.class);
+        i.putExtra("today", today);
         startActivity(i);
-        finish();
     }
 }

@@ -27,7 +27,6 @@ public class AddMealActivity extends AppCompatActivity {
     public void handle_home(View v) {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
-            finish();
     }
 
     public void handle_add_meal(View v) {}
@@ -35,7 +34,6 @@ public class AddMealActivity extends AppCompatActivity {
     public void handle_logs(View v) {
             Intent i = new Intent(this, LogsActivity.class);
             startActivity(i);
-            finish();
     }
 
 }
