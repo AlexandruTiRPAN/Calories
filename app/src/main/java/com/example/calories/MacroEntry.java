@@ -22,4 +22,18 @@ public class MacroEntry {
     public int carbs;
     public int fat;
     public int calories;
+    String name;
+    String image;
+
+    public MacroEntry(Meal meal, int day_id) {
+        this.name = meal.name;
+        this.image = meal.image;
+        this.protein = meal.protein;
+        this.carbs = meal.carbs;
+        this.fat = meal.fat;
+        this.calories = meal.calories;
+        this.day_id=day_id;
+    }
+
+    public MacroEntry() {}
 }

@@ -211,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void handle_add_meal(View v) {
         Intent i = new Intent(this, AddMealActivity.class);
+        i.putExtra("today", today);
         startActivity(i);
     }
 

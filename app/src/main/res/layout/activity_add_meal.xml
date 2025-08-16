@@ -23,4 +23,121 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/create_meal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="339dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="87dp"
+        android:clickable="true"
+        android:contentDescription="Create a new meal."
+        android:onClick="showPopUp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meal_scroller"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+    <Button
+        android:id="@+id/protein_meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="handle_show_protein"
+        android:text="Protein"
+        app:layout_constraintBottom_toTopOf="@+id/meal_scroller"
+        app:layout_constraintEnd_toStartOf="@+id/carbs_meals"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/carbs_meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="handle_show_carbs"
+        android:text="Carbs"
+        app:layout_constraintBottom_toTopOf="@+id/meal_scroller"
+        app:layout_constraintEnd_toStartOf="@+id/fats_meals"
+        app:layout_constraintStart_toEndOf="@+id/protein_meals"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/fats_meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="handle_show_fats"
+        android:text="Fats"
+        app:layout_constraintBottom_toTopOf="@+id/meal_scroller"
+        app:layout_constraintEnd_toStartOf="@+id/your_meals"
+        app:layout_constraintStart_toEndOf="@+id/carbs_meals"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/your_meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="handle_show_custom"
+        android:text="Meals"
+        app:layout_constraintBottom_toTopOf="@+id/meal_scroller"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fats_meals"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/meal_scroller"
+        android:layout_width="409dp"
+        android:layout_height="459dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="Meals."
+        app:layout_constraintBottom_toTopOf="@+id/create_meal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/protein_meals"
+        app:layout_constraintVertical_bias="0.812">
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/meals_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="5dp"
+            app:columnCount="4">
+
+        </androidx.gridlayout.widget.GridLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/meal_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="108dp"
+        android:text="TextView"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meal_scroller" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
