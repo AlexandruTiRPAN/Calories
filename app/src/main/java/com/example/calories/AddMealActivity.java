@@ -10,6 +10,7 @@ import androidx.gridlayout.widget.GridLayout;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -81,6 +82,7 @@ public class AddMealActivity extends AppCompatActivity {
         EditText carbsInput = popupView.findViewById(R.id.meal_carbs);
         EditText fatInput = popupView.findViewById(R.id.meal_fat);
         EditText nameInput = popupView.findViewById(R.id.meal_name);
+        Spinner spinner = findViewById(R.id.meal_category_spinner);
 
         String proteinStr = proteinInput.getText().toString();
         String carbsStr = carbsInput.getText().toString();
@@ -91,11 +93,14 @@ public class AddMealActivity extends AppCompatActivity {
         int carbs = carbsStr.isEmpty() ? 0 : Integer.parseInt(carbsStr);
         int fat = fatStr.isEmpty() ? 0 : Integer.parseInt(fatStr);
         int calories=4*protein+4*carbs+9*fat;
+        String category = spinner.getSelectedItem().toString().toLowerCase();
+
+
 
         DatabaseExecutor.diskIO().execute(()->{
             Meal new_meal = new Meal();
             new_meal.name=nameStr;
-            new_meal.category="custom";
+            new_meal.category=category;
             new_meal.image="default_image";
             new_meal.protein=protein;
             new_meal.carbs=carbs;

@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">calories</string>
+    <string name="app_name">MealApp</string>
+
+    <string-array name="meal_categories">
+        <item>Protein</item>
+        <item>Carbs</item>
+        <item>Fats</item>
+        <item>Custom</item>
+    </string-array>
 </resources>
