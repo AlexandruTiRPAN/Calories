@@ -2,6 +2,7 @@ package com.example.calories;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
@@ -44,16 +45,7 @@ public class AddMealActivity extends AppCompatActivity {
         dao=db.dailyMacrosDao();
         macro_dao=db.macroEntryDao();
         meals_grid=findViewById(R.id.meals_grid);
-//        DatabaseExecutor.diskIO().execute(() -> {
-//            Meal meal= new Meal();
-//            meal.image="image";
-//            meal.category="protein";
-//            meal.name="caltite";
-//            meal.protein=0;
-//            meal.carbs=0;
-//            meal.fat=0;
-//            meals_dao.insert(meal);
-//        });
+        handle_show_meals("protein");
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -82,7 +74,7 @@ public class AddMealActivity extends AppCompatActivity {
         EditText carbsInput = popupView.findViewById(R.id.meal_carbs);
         EditText fatInput = popupView.findViewById(R.id.meal_fat);
         EditText nameInput = popupView.findViewById(R.id.meal_name);
-        Spinner spinner = findViewById(R.id.meal_category_spinner);
+        Spinner spinner = popupView.findViewById(R.id.meal_category_spinner);
 
         String proteinStr = proteinInput.getText().toString();
         String carbsStr = carbsInput.getText().toString();
@@ -96,7 +88,6 @@ public class AddMealActivity extends AppCompatActivity {
         String category = spinner.getSelectedItem().toString().toLowerCase();
 
 
-
         DatabaseExecutor.diskIO().execute(()->{
             Meal new_meal = new Meal();
             new_meal.name=nameStr;
@@ -107,7 +98,7 @@ public class AddMealActivity extends AppCompatActivity {
             new_meal.fat=fat;
             new_meal.calories=calories;
             meals_dao.insert(new_meal);
-            handle_show_meals("custom");
+            handle_show_meals(category);
         });
     }
 
@@ -134,28 +125,24 @@ public class AddMealActivity extends AppCompatActivity {
                     meals=meals_dao.selectByCategory("protein");
                     runOnUiThread(()->{
                         ((TextView) findViewById(R.id.meal_type)).setText("Protein meals");
-                        findViewById(R.id.meal_type).setVisibility(View.VISIBLE);
                     });
                     break;
                 case "carbs":
                     meals=meals_dao.selectByCategory("carbs");
                     runOnUiThread(()->{
                         ((TextView) findViewById(R.id.meal_type)).setText("Carbs meals");
-                        findViewById(R.id.meal_type).setVisibility(View.VISIBLE);
                     });
                     break;
                 case "fats":
                     meals=meals_dao.selectByCategory("fats");
                     runOnUiThread(()->{
                         ((TextView) findViewById(R.id.meal_type)).setText("Fats meals");
-                        findViewById(R.id.meal_type).setVisibility(View.VISIBLE);
                     });
                     break;
                 case "custom":
                     meals=meals_dao.selectByCategory("custom");
                     runOnUiThread(()->{
                         ((TextView) findViewById(R.id.meal_type)).setText("Custom meals");
-                        findViewById(R.id.meal_type).setVisibility(View.VISIBLE);
                     });
                     break;
                 default:
@@ -175,6 +162,7 @@ public class AddMealActivity extends AppCompatActivity {
                             String my_image = meal.image;
                             int imageId = getResources().getIdentifier(my_image, "drawable", getPackageName());
                             imageView.setImageResource(imageId);
+
 
                             meal_cell.setOnClickListener(view -> {
                                 handle_meal_clicked(meal);
@@ -201,6 +189,14 @@ public class AddMealActivity extends AppCompatActivity {
                 ((TextView) popupView.findViewById(R.id.carbs_text)).setText(String.valueOf(meal.carbs));
                 ((TextView) popupView.findViewById(R.id.fat_text)).setText(String.valueOf(meal.fat));
                 ((TextView) popupView.findViewById(R.id.calories_text)).setText(String.valueOf(meal.calories));
+                if(meal.category.equals("custom")) {
+                    popupView.findViewById(R.id.grams_input).setVisibility(View.GONE);
+                    popupView.findViewById(R.id.grams_label).setVisibility(View.GONE);
+                }
+                else{
+                    popupView.findViewById(R.id.grams_input).setVisibility(View.VISIBLE);
+                    popupView.findViewById(R.id.grams_label).setVisibility(View.VISIBLE);
+                }
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -223,6 +219,11 @@ public class AddMealActivity extends AppCompatActivity {
             if(existing!=null){
                 MacroEntry entry=new MacroEntry(meal, existing.id);
                 macro_dao.insert(entry);
+                String input = ((EditText)v.findViewById(R.id.grams_input)).getText().toString().trim();
+                if(!input.isEmpty()){
+                    int grams = Integer.parseInt(input);
+                    
+                }
 
                 existing.protein = existing.protein+meal.protein;
                 existing.carbs = existing.carbs+meal.carbs;
