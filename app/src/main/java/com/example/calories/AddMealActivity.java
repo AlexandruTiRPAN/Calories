@@ -217,18 +217,20 @@ public class AddMealActivity extends AppCompatActivity {
         DatabaseExecutor.diskIO().execute(()->{
             DailyMacros existing = dao.getByDate(today);
             if(existing!=null){
-                MacroEntry entry=new MacroEntry(meal, existing.id);
-                macro_dao.insert(entry);
-                String input = ((EditText)v.findViewById(R.id.grams_input)).getText().toString().trim();
-                if(!input.isEmpty()){
-                    int grams = Integer.parseInt(input);
-                    
+                String grams_input = ((EditText)v.findViewById(R.id.grams_input)).getText().toString().trim();
+                float multiplier=1;
+                if(!grams_input.isEmpty()){
+                    multiplier = Integer.parseInt(grams_input);
                 }
-
-                existing.protein = existing.protein+meal.protein;
-                existing.carbs = existing.carbs+meal.carbs;
-                existing.fat = existing.fat+meal.fat;
-                existing.calories = existing.calories+meal.calories;
+                if(multiplier!=1){
+                    multiplier/=100;
+                }
+                existing.protein = existing.protein+(int) (meal.protein*multiplier);
+                existing.carbs = existing.carbs+(int) (meal.carbs*multiplier);
+                existing.fat = existing.fat+(int) (meal.fat*multiplier);
+                existing.calories = existing.calories+(int) (meal.calories*multiplier);
+                MacroEntry entry=new MacroEntry(meal, existing.id, multiplier);
+                macro_dao.insert(entry);
                 dao.update(existing);
                 }
 

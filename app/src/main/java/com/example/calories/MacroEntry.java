@@ -25,6 +25,16 @@ public class MacroEntry {
     String name;
     String image;
 
+    public MacroEntry(Meal meal, int day_id, float multiplier) {
+        this.name = meal.name;
+        this.image = meal.image;
+        this.protein = (int) (meal.protein*multiplier);
+        this.carbs = (int) (meal.carbs*multiplier);
+        this.fat = (int) (meal.fat*multiplier);
+        this.calories = (int) (meal.calories*multiplier);
+        this.day_id=day_id;
+    }
+
     public MacroEntry(Meal meal, int day_id) {
         this.name = meal.name;
         this.image = meal.image;
