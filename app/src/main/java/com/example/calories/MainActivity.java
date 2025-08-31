@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "nutrition-db").fallbackToDestructiveMigration().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "calories.db").createFromAsset("databases/calories.db").build();
         dao = db.dailyMacrosDao();
         macro_dao = db.macroEntryDao();
         today = getIntent().getStringExtra("today");

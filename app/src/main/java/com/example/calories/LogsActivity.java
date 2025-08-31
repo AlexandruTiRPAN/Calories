@@ -27,9 +27,7 @@ public class LogsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_logs);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "nutrition-db")
-                .fallbackToDestructiveMigration()
-                .build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "calories.db").createFromAsset("databases/calories.db").build();
         dao = db.dailyMacrosDao();
 
         today = getIntent().getStringExtra("today");

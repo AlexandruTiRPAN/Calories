@@ -40,7 +40,7 @@ public class AddMealActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_meal);
         today = getIntent().getStringExtra("today");
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "nutrition-db").fallbackToDestructiveMigration().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "calories.db").createFromAsset("databases/calories.db").build();
         meals_dao=db.mealDao();
         dao=db.dailyMacrosDao();
         macro_dao=db.macroEntryDao();
