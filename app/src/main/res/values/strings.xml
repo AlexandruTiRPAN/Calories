@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Anabolic Calorie Tracker</string>
+    <string name="app_name">Anabolic Macros Tracker</string>
 
     <string-array name="meal_categories">
         <item>Protein</item>

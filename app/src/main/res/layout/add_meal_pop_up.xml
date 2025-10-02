@@ -125,7 +125,7 @@
         app:layout_constraintStart_toEndOf="@id/grams_label"
         app:layout_constraintBaseline_toBaselineOf="@id/grams_label" />
 
-    <!-- Buttons: Close left, Save right -->
+    <!-- Buttons: Close, Delete, Save -->
     <Button
         android:id="@+id/close_button"
         android:layout_width="0dp"
@@ -133,10 +133,24 @@
         android:text="Close"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/delete_button"
+        app:layout_constraintTop_toBottomOf="@id/grams_label"
+        android:layout_marginTop="20dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginEnd="8dp"/>
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/close_button"
         app:layout_constraintEnd_toStartOf="@+id/save_button"
         app:layout_constraintTop_toBottomOf="@id/grams_label"
         android:layout_marginTop="20dp"
         app:layout_constraintHorizontal_weight="1"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"/>
 
     <Button
@@ -145,11 +159,12 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/close_button"
+        app:layout_constraintStart_toEndOf="@id/delete_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/grams_label"
         android:layout_marginTop="20dp"
         app:layout_constraintHorizontal_weight="1"
         android:layout_marginStart="8dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

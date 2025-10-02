@@ -19,6 +19,4 @@ public interface MealDao {
     @Query("SELECT * FROM Meal WHERE category = :category")
     List<Meal> selectByCategory(String category);
 
-    @Query("SELECT * FROM DailyMacros WHERE id = :id LIMIT 1")
-    Meal getById(int id);
 }

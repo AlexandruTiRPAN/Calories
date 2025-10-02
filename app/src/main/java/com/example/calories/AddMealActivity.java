@@ -203,15 +203,26 @@ public class AddMealActivity extends AppCompatActivity {
 
                 Button closeBtn = popupView.findViewById(R.id.close_button);
                 Button saveBtn = popupView.findViewById(R.id.save_button);
+                Button deleteBtn = popupView.findViewById(R.id.delete_button);
                 closeBtn.setOnClickListener(view -> dialog.dismiss());
                 saveBtn.setOnClickListener(view -> {
                     handle_add_meal_today(popupView, meal);
+                    dialog.dismiss();
+                });
+                deleteBtn.setOnClickListener(view -> {
+                    handle_delete_meal(meal);
                     dialog.dismiss();
                 });
             });
         }
     }
 
+    public void handle_delete_meal(Meal meal){
+        DatabaseExecutor.diskIO().execute(() -> {
+            meals_dao.deleteById(meal.id);
+        });
+        handle_show_meals(meal.category);
+    }
 
     public void handle_add_meal_today(View v, Meal meal){
         DatabaseExecutor.diskIO().execute(()->{
