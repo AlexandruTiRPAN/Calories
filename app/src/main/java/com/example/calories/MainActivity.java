@@ -102,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
                             ((TextView) additionEntry.findViewById(R.id.carbs_entry_value)).setText(String.valueOf(entry.carbs));
                             ((TextView) additionEntry.findViewById(R.id.fat_entry_value)).setText(String.valueOf(entry.fat));
                             ((TextView) additionEntry.findViewById(R.id.calories_entry_value)).setText(String.valueOf(entry.calories));
+                            if(entry.name!=null){
+                                additionEntry.findViewById(R.id.entry_name).setVisibility(View.VISIBLE);
+                                ((TextView) additionEntry.findViewById(R.id.entry_name)).setText(entry.name);
+                            }
+
 
                             FloatingActionButton removeBtn = additionEntry.findViewById(R.id.remove_entry);
                             removeBtn.setOnClickListener(view -> handle_remove_entry(additionEntry, entry));

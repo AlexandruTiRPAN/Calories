@@ -119,9 +119,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:columnCount="4"
-            app:useDefaultMargins="true"
-            app:alignmentMode="alignBounds"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:clipToPadding="false">
+        </androidx.gridlayout.widget.GridLayout>
+
 
 
     </ScrollView>

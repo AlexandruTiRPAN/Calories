@@ -35,15 +35,5 @@ public class MacroEntry {
         this.day_id=day_id;
     }
 
-    public MacroEntry(Meal meal, int day_id) {
-        this.name = meal.name;
-        this.image = meal.image;
-        this.protein = meal.protein;
-        this.carbs = meal.carbs;
-        this.fat = meal.fat;
-        this.calories = meal.calories;
-        this.day_id=day_id;
-    }
-
     public MacroEntry() {}
 }
